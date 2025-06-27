@@ -5,8 +5,7 @@ title: Matt Blackford – Technical Blog
 
 # 👋 Welcome
 
-I'm Matt, a cloud and DevOps engineer and technical leader.  
-This is where I write about building infrastructure, managing systems at scale, and lessons from the field.
+I'm Matt, a cloud and DevOps engineer and technical leader. This is where I write about building infrastructure, managing systems at scale, and lessons from the field.
 
 ---
 
