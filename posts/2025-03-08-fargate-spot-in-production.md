@@ -135,7 +135,7 @@ It’s simple, robust, and safe — and you can deploy it in any ECS cluster wit
 
 ## Try It Yourself
 
-You can adopt this strategy by copying and adapting [this CloudFormation template](#) (link your GitHub or internal repo). It uses:
+You can adopt this strategy by copying and adapting [this CloudFormation template](./2025-03-08-fargate-spot-in-production/dual-service-template.yaml) (link your GitHub or internal repo). It uses:
 
 * Dual ECS Services with shared ALB Target Group
 * Auto Scaling Policies for CPU/Memory
