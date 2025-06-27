@@ -39,5 +39,3 @@ You can find me on:
 - [GitHub](https://github.com/mblackford)
 
 Feel free to reach out or open an issue if you have questions about any of the posts.
-
----
