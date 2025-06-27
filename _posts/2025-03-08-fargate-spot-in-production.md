@@ -1,11 +1,3 @@
----
-title: "Using Fargate Spot in Production Without Getting Burned (and Still Save ~60%)"
-date: 2025-03-08
-tags: [aws, devops, cost-optimisation]
-summary: >
-A guide to safely using AWS ECS Fargate Spot for real workloads without compromising reliability.
----
-
 # Using Fargate Spot in Production Without Getting Burned (and Still Save ~60%)
 
 In a recent consulting project, I tackled an interesting challenge that combined my passion for cloud cost optimization with the practicalities of AWS infrastructure. I devised a strategy that allowed me to reduce compute costs by around **60%** using **AWS Fargate Spot** instances, all while maintaining reliability. Here's how I did it.
