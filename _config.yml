@@ -3,5 +3,6 @@ description: Cloud infrastructure, DevOps, and technical leadership writing by M
 author: Matthew Blackford
 theme: jekyll-theme-cayman
 markdown: kramdown
+baseurl: "/blog"
 plugins:
   - jekyll-seo-tag
