@@ -11,7 +11,7 @@ I write these posts to:
 
 ## 📚 Articles
 
-- **[Using Fargate Spot in Production Without Getting Burned](./posts/2025-03-08-fargate-spot-in-production.md)**  
+- **[Using Fargate Spot in Production Without Getting Burned](./_posts/2025-03-08-fargate-spot-in-production.md)**  
   _How to reliably use Spot tasks with ECS without breaking your stack — lessons learned from real workloads._
 
 I'll add new posts when I have something worth sharing.
