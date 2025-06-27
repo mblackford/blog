@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Matt Blackford – Technical Blog
+title: Matt Blackford - Technical Blog
 ---
 
 # 👋 Welcome
