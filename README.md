@@ -13,7 +13,7 @@ I write these posts to:
 
 | Date       | Title & Link |
 |------------|--------------|
-| 2025-03-8  | [Using EC2 Fargate in Production Without Getting Burned]() |
+| 2025-03-8  | [Using Fargate Spot in Production Without Getting Burned](./posts/2025-03-08-fargate-spot-in-production.md) |
 
 I'll add new posts when I have something worth sharing.
 
