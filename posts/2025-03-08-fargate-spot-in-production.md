@@ -154,6 +154,8 @@ Got questions or want to share how you're using Spot? Drop me a note!
 
 - [LinkedIn](https://www.linkedin.com/in/matthew-blackford/)
 
+---
+
 > © 2025 Matt Blackford.  
 > Text content is licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/).  
 > Code snippets are licensed under the [MIT License](https://opensource.org/license/mit/).
