@@ -1,8 +1,32 @@
 ---
-layout: home
+layout: default
 title: Matt Blackford – Technical Blog
 ---
 
-Welcome to my technical blog. I write about cloud infrastructure, DevOps strategy, and lessons from leading technical teams.
+# 👋 Welcome
 
-You can also [browse the source on GitHub](https://github.com/mblackford/blog).
+I'm Matt, a cloud and DevOps engineer and technical leader.  
+This is where I write about building infrastructure, managing systems at scale, and lessons from the field.
+
+---
+
+## 📝 Recent Posts
+
+<ul>
+  {% for post in site.posts %}
+    <li>
+      <a href="{{ post.url }}">{{ post.title }}</a><br>
+      <small>{{ post.date | date: "%B %d, %Y" }}</small><br>
+      <p>{{ post.excerpt }}</p>
+    </li>
+  {% endfor %}
+</ul>
+
+---
+
+## 📌 About This Blog
+
+- Text is licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+- Code is MIT-licensed and free to reuse
+
+[View this blog on GitHub](https://github.com/mblackford/blog)
