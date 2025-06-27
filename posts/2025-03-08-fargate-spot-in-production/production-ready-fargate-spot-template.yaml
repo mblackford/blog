@@ -1,0 +1,135 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Production-ready CloudFormation template for reliably running ECS Fargate Spot using dual services (Spot + On-Demand) with autoscaling - Matthew Blackford
+
+Parameters:
+  ClusterName:
+    Type: String
+  Cpu:
+    Type: Number
+  ExecutionRoleArn:
+    Type: String
+  Image:
+    Type: String
+  MaxCapacity:
+    Type: Number
+  Memory:
+    Type: Number
+  MinCapacity:
+    Type: Number
+  Port:
+    Type: Number
+    Default: 4000
+  SecurityGroupId:
+    Type: String
+  ServiceName:
+    Type: String
+  SubnetIds:
+    Type: List<String>
+  TaskRoleArn:
+    Type: String
+
+Resources:
+
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Cpu: !Ref Cpu
+      ExecutionRoleArn: !Ref ExecutionRoleArn
+      Family: !Ref ServiceName
+      Memory: !Ref Memory
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      TaskRoleArn: !Ref TaskRoleArn
+      ContainerDefinitions:
+        - Cpu: !Ref Cpu
+          Essential: true
+          Image: !Ref Image
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub "/ecs/${ServiceName}"
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+          Memory: !Ref Memory
+          Name: !Ref ServiceName
+          PortMappings:
+            - ContainerPort: !Ref Port
+
+  SpotService:
+    Type: AWS::ECS::Service
+    Properties:
+      CapacityProviderStrategy:
+        - CapacityProvider: FARGATE_SPOT
+          Weight: 1
+      Cluster: !Ref ClusterName
+      DesiredCount: !Ref MinCapacity
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups: [!Ref SecurityGroupId]
+          Subnets: !Ref SubnetIds
+      TaskDefinition: !Ref TaskDefinition
+
+  OnDemandService:
+    Type: AWS::ECS::Service
+    Properties:
+      CapacityProviderStrategy:
+        - CapacityProvider: FARGATE
+          Weight: 1
+      Cluster: !Ref ClusterName
+      DesiredCount: 1
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups: [!Ref SecurityGroupId]
+          Subnets: !Ref SubnetIds
+      TaskDefinition: !Ref TaskDefinition
+
+  SpotScalingTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: !Ref MaxCapacity
+      MinCapacity: !Ref MinCapacity
+      ResourceId: !Sub service/${ClusterName}/${SpotService}
+      RoleARN: !Ref ExecutionRoleArn
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+
+  OnDemandScalingTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: !Ref MaxCapacity
+      MinCapacity: 1
+      ResourceId: !Sub service/${ClusterName}/${OnDemandService}
+      RoleARN: !Ref ExecutionRoleArn
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+
+  SpotCpuScaling:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: !Sub ${ServiceName}-spot-cpu-scaling
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId: !Ref SpotScalingTarget
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        ScaleInCooldown: 60
+        ScaleOutCooldown: 300
+        TargetValue: 50.0
+
+  OnDemandCpuScaling:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: !Sub ${ServiceName}-ondemand-cpu-scaling
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId: !Ref OnDemandScalingTarget
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        ScaleInCooldown: 60
+        ScaleOutCooldown: 60
+        TargetValue: 80.0
+
