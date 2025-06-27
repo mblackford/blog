@@ -135,7 +135,7 @@ It’s simple, robust, and safe — and you can deploy it in any ECS cluster wit
 
 ## Try It Yourself
 
-You can adopt this strategy by copying and adapting [this CloudFormation template](./2025-03-08-fargate-spot-in-production/production-ready-fargate-spot-template.yaml). It uses:
+You can adopt this strategy by copying and adapting [this CloudFormation template](https://github.com/mblackford/blog/blob/main/code/2025-03-08-fargate-spot-in-production/production-ready-fargate-spot-template.yaml). It uses:
 
 * Dual ECS services with shared task definition
 * Tuned CPU auto-scaling policies for service balancing
