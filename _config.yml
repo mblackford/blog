@@ -1,8 +1,7 @@
 title: Matt Blackford – Technical Blog
 description: Cloud infrastructure, DevOps, and technical leadership writing by Matthew Blackford.
 author: Matthew Blackford
-theme: minima
+theme: just-the-docs
 markdown: kramdown
 plugins:
-  - jekyll-feed
   - jekyll-seo-tag
