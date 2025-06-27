@@ -1,4 +1,4 @@
-# 🛠️ Matt Blackford’s Technical Blog
+# 🛠️ Matt Blackford - Technical Blog
 
 Welcome to my public technical blog where I share insights, solutions, and architectural patterns from my work in **cloud infrastructure**, **DevOps**, and **engineering leadership**.
 
