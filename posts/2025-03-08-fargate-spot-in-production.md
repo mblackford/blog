@@ -1,7 +1,7 @@
 <!--
 title: "Using Fargate Spot in Production Without Getting Burned (and Still Save ~60%)"
 date: 2025-03-08
-tags: [aws, devops, cost-optimization]
+tags: [aws, devops, cost-optimisation]
 summary: >
   A guide to safely using AWS ECS Fargate Spot for real workloads without compromising reliability.
 -->
@@ -19,7 +19,7 @@ Fargate Spot offers a fantastic opportunity to optimise compute costs by taking 
 You might expect that the [capacity provider strategy](https://docs.aws.amazon.com/AmazonECS/latest/userguide/cluster-capacity-providers.html) would automatically rebalance workloads between Fargate and Spot. But it doesn't. If AWS takes your Spot capacity, the service won’t automatically launch new tasks on regular Fargate to compensate — it just drops capacity.
 
 > "I thought ECS would fallback to regular Fargate when Spot fails, but nope — it just silently drops tasks. Had to learn the hard way."
-> — [https://www.reddit.com/r/aws/comments/147hwx0/ecs\_capacity\_providers\_fargate\_and\_fargate\_spot/](https://www.reddit.com/r/aws/comments/147hwx0/ecs_capacity_providers_fargate_and_fargate_spot/)
+> — [https://www.reddit.com/r/aws/comments/147hwx0/ecs_capacity_providers_fargate_and_fargate_spot/](https://www.reddit.com/r/aws/comments/147hwx0/ecs_capacity_providers_fargate_and_fargate_spot/)
 
 > *"Fargate doesn’t replace Spot capacity with on-demand capacity."*
 > — [https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-capacity-providers.html](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-capacity-providers.html)
@@ -82,16 +82,16 @@ SpotService:
     DesiredCount: !Ref MinCapacity
 ```
 
-### 3. Fargate Backup Service
+### 3. On-Demand Backup Service
 
 ```yaml
-FargateService:
+OnDemandService:
   Type: AWS::ECS::Service
   Properties:
     CapacityProviderStrategy:
       - CapacityProvider: FARGATE
         Weight: 1
-    DesiredCount: !Ref MinimumFargateBase
+    DesiredCount: 1
 ```
 
 ### 4. Smart Scaling
@@ -104,7 +104,7 @@ SpotCpuScaling:
   Properties:
     ScalingTargetId: !Ref SpotScalingTarget
     TargetTrackingScalingPolicyConfiguration:
-      TargetValue: 40.0  # More aggressive
+      TargetValue: 50.0  # More aggressive
 ```
 
 ```yaml
@@ -113,7 +113,7 @@ FargateCpuScaling:
   Properties:
     ScalingTargetId: !Ref FargateScalingTarget
     TargetTrackingScalingPolicyConfiguration:
-      TargetValue: 70.0  # Higher threshold
+      TargetValue: 80.0  # Higher threshold
 ```
 
 The lower threshold on Spot ensures it handles load first, while the Fargate service only kicks in when needed.
@@ -135,12 +135,12 @@ It’s simple, robust, and safe — and you can deploy it in any ECS cluster wit
 
 ## Try It Yourself
 
-You can adopt this strategy by copying and adapting [this CloudFormation template](./2025-03-08-fargate-spot-in-production/dual-service-template.yaml) (link your GitHub or internal repo). It uses:
+You can adopt this strategy by copying and adapting [this CloudFormation template](./2025-03-08-fargate-spot-in-production/production-ready-fargate-spot-template.yaml). It uses:
 
-* Dual ECS Services with shared ALB Target Group
-* Auto Scaling Policies for CPU/Memory
-* Secrets management and DNS records
-* Optional execution/task roles and custom entrypoints
+* Dual ECS services with shared task definition
+* Tuned CPU auto-scaling policies for service balancing
+* Log configuration to combine logs from both services 
+* Private subnet network configuration
 
 All production-ready and reusable.
 
